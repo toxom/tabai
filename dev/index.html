@@ -1,0 +1,66 @@
+<!-- dev/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TabAI Development Preview</title>
+    <style>
+        body {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            background: #f0f0f0;
+        }
+        #extension-container {
+            width: 400px;
+            height: 600px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div id="extension-container">
+        <!-- Load your popup content -->
+        <iframe src="../popup/popup.html" width="100%" height="100%" frameborder="0"></iframe>
+    </div>
+
+    <!-- Mock Chrome API -->
+    <script>
+        // Mock Chrome APIs
+        window.chrome = {
+            tabs: {
+                query: (options, callback) => {
+                    // Mock tab data
+                    callback([
+                        { 
+                            id: 1, 
+                            title: "Example Tab 1", 
+                            url: "https://example1.com",
+                            favIconUrl: "https://example1.com/favicon.ico"
+                        },
+                        { 
+                            id: 2, 
+                            title: "Example Tab 2", 
+                            url: "https://example2.com",
+                            favIconUrl: "https://example2.com/favicon.ico"
+                        }
+                        // Add more mock tabs as needed
+                    ]);
+                },
+                update: (tabId, options) => {
+                    console.log('Switching to tab:', tabId);
+                }
+            },
+            runtime: {
+                sendMessage: (message) => {
+                    console.log('Message sent:', message);
+                    return Promise.resolve({ success: true });
+                }
+            }
+        };
+    </script>
+</body>
+</html>

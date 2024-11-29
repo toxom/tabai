@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    padding: 16px;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-input-section {
+    margin-bottom: 16px;
+}
+
+#ai-task {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 8px;
+    padding: 8px;
+}
+
+.network-view {
+    flex: 1;
+    margin: 16px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

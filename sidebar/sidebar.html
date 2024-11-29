@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TabAI Sidebar</title>
+    <link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+    <div id="sidebar-app">
+        <div class="ai-input-section">
+            <textarea id="ai-task" placeholder="Enter analysis context..."></textarea>
+            <button id="analyze-btn">Analyze Tabs</button>
+        </div>
+        <div class="network-view" id="tab-network"></div>
+        <div class="tab-list" id="organized-tabs"></div>
+    </div>
+    <script src="../utils/networkTopology.js"></script>
+    <script src="../utils/tabClustering.js"></script>
+    <script src="sidebar.js"></script>
+</body>
+</html>

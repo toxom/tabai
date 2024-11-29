@@ -1,0 +1,29 @@
+{
+  "name": "tabai",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "live-server --port=5500 --no-browser",
+    "watch": "concurrently \"webpack --watch\" \"npx nodemon --watch popup --watch content --watch background --ext js,html,css\"",
+    "format": "prettier --write \"**/*.{js,html,css,json}\"",
+    "lint": "eslint \"**/*.js\"",
+    "build": "webpack --mode production && mkdir -p dist/popup && cp popup/popup.html popup/popup.css dist/popup/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "eslint": "^9.15.0",
+    "live-server": "^1.2.2",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.4.1",
+    "web-ext": "^7.12.0",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0"
+  }
+}

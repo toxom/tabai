@@ -1,0 +1,72 @@
+<script src="../popup.bundle.js"></script>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TabAI Quantum Manager</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div id="app">
+        <div class="header">
+            <div class="main-tabs">
+                <button class="main-tab-btn active" data-tab="visualization">Visualization</button>
+                <button class="main-tab-btn" data-tab="ai-results">AI Analysis</button>
+            </div>        
+        </div>
+        <div class="ai-input-section">
+            <textarea id="ai-task" placeholder="Enter analysis context or task..."></textarea>
+            <button id="analyze-btn">Analyze Tabs</button>
+        </div>
+
+        <!-- Add main tab navigation -->
+
+
+        <div class="tab-content active" id="visualization-content">
+            <div class="network-section">
+                <div class="network-tabs">
+                    <button class="network-tab-btn active" data-view="force">Force</button>
+                    <button class="network-tab-btn" data-view="hierarchical">Tree</button>
+                    <button class="network-tab-btn" data-view="circular">Circular</button>
+                </div>
+                <div class="network-view" id="tab-network">
+                    <canvas id="network-canvas"></canvas>
+                </div>
+            </div>
+
+            <div class="groups-section">
+                <div class="groups-header">
+                    <h2>Tab Groups</h2>
+                    <button id="toggle-groups">Toggle Groups</button>
+                </div>
+                <div id="tabs-container" class="groups-visible">
+                    <!-- Tab groups will be rendered here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Results Tab Content -->
+        <div class="tab-content" id="ai-results-content">
+            <div class="analysis-results">
+                <div class="results-section">
+                    <h3>Clusters</h3>
+                    <div id="ai-clusters"></div>
+                </div>
+                <div class="results-section">
+                    <h3>Themes</h3>
+                    <div id="ai-themes"></div>
+                </div>
+                <div class="results-section">
+                    <h3>Relevance</h3>
+                    <div id="ai-relevance"></div>
+                </div>
+                <div class="results-section">
+                    <h3>Suggestions</h3>
+                    <div id="ai-suggestions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>

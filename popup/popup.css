@@ -1,0 +1,270 @@
+/* popup.css */
+body {
+    width: 100%; /* Instead of 300px fixed width */
+    height: 100vh;
+    padding: 0.5rem;
+    margin: 0;
+    font-family: "Sofia", sans-serif;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box; /* This ensures padding doesn't add to width */
+}
+
+/* Make app take full width */
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 16px;
+    width: 100%;
+}
+
+.title {
+    color: #6200ea;
+    margin: 0 0 16px 0;
+}
+
+.header {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    height: auto;
+
+}
+
+.main-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    margin-bottom: 16px;
+}
+
+.main-tab-btn {
+    flex: 1;
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.main-tab-btn.active {
+    background: #6200ea;
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Analysis results styling */
+.analysis-results {
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.results-section {
+    margin-bottom: 20px;
+}
+
+.results-section h3 {
+    color: #6200ea;
+    margin: 0 0 8px 0;
+    font-size: 14px;
+}
+
+.results-section div {
+    background: white;
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+h1 {
+    color: #6200ea;
+    margin: 0 0 16px 0;
+}
+
+.ai-input-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 20px;
+}
+
+#ai-task {
+    height: auto;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 1rem;
+    resize: none;
+    font-family: inherit;
+}
+
+#analyze-btn {
+    background: #6200ea;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#analyze-btn:hover {
+    background: #7722ff;
+}
+
+.network-view {
+    flex: 0 0 300px; /* Fixed height for network view */
+    min-height: 200px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin: 8px 0;
+    padding: 8px;
+}
+
+#tabs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    flex: 1; /* This will make it fill available space */
+    min-height: 0; /* This is crucial for scroll to work with flex */
+}
+
+.tab-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.tab-item:hover {
+    background: #f5f5f5;
+}
+
+.tab-item img {
+    min-width: 16px;
+    min-height: 16px;
+    object-fit: cover;
+}
+
+.tab-item span {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tab-cluster {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.cluster-header {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #6200ea;
+}
+
+.network-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.network-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.network-tab-btn {
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.network-tab-btn.active {
+    background: #6200ea;
+    color: white;
+}
+
+.network-view {
+    position: relative;
+    height: 300px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#network-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.groups-section {
+    border-top: 1px solid #eee;
+    padding-top: 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Take remaining space */
+    min-height: 0; /* Allow content to scroll */
+}
+.groups-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.groups-header h2 {
+    margin: 0;
+    font-size: 16px;
+    color: #6200ea;
+}
+
+#toggle-groups {
+    padding: 4px 8px;
+    border: 1px solid #6200ea;
+    background: white;
+    color: #6200ea;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#toggle-groups:hover {
+    background: #6200ea;
+    color: white;
+}
+
+#tabs-container.groups-hidden {
+    display: none;
+}
+
+#tabs-container.groups-visible {
+    display: flex;
+    flex: 1; /* Take all available space */
+    min-height: 0; /* Enable scrolling */
+}
