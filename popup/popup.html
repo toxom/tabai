@@ -1,5 +1,3 @@
-<script src="../popup.bundle.js"></script>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,21 +10,18 @@
             <div class="main-tabs">
                 <button class="main-tab-btn active" data-tab="visualization">Visualization</button>
                 <button class="main-tab-btn" data-tab="ai-results">AI Analysis</button>
-            </div>        
+            </div>
         </div>
         <div class="ai-input-section">
             <textarea id="ai-task" placeholder="Enter analysis context or task..."></textarea>
             <button id="analyze-btn">Analyze Tabs</button>
         </div>
 
-        <!-- Add main tab navigation -->
-
-
         <div class="tab-content active" id="visualization-content">
             <div class="network-section">
                 <div class="network-tabs">
-                    <button class="network-tab-btn active" data-view="force">Force</button>
-                    <button class="network-tab-btn" data-view="hierarchical">Tree</button>
+                    <button class="network-tab-btn active" data-view="bubble">Bubble</button>
+                    <button class="network-tab-btn" data-view="tree">Tree</button>
                     <button class="network-tab-btn" data-view="circular">Circular</button>
                 </div>
                 <div class="network-view" id="tab-network">
@@ -35,12 +30,13 @@
             </div>
 
             <div class="groups-section">
-                <div class="groups-header">
-                    <h2>Tab Groups</h2>
-                    <button id="toggle-groups">Toggle Groups</button>
+                <div class="groups-controls">
+                    <input type="text" id="tab-search" placeholder="Search tabs..." class="search-input">
                 </div>
-                <div id="tabs-container" class="groups-visible">
-                    <!-- Tab groups will be rendered here -->
+                <div id="tabs-container">
+                    <div id="pinned-tabs"></div>
+                    <div id="group-tabs"></div>
+                    <div id="domain-tabs"></div>
                 </div>
             </div>
         </div>

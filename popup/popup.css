@@ -1,22 +1,22 @@
 /* popup.css */
 body {
-    width: 100%; /* Instead of 300px fixed width */
+    width: 100%;
     height: 100vh;
-    padding: 0.5rem;
+    padding: 16px;
     margin: 0;
-    font-family: "Sofia", sans-serif;
+    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    box-sizing: border-box; /* This ensures padding doesn't add to width */
+    overflow-x: hidden;
 }
 
-/* Make app take full width */
 #app {
+    width: 90%;
     display: flex;
     flex-direction: column;
     height: 100%;
     gap: 16px;
-    width: 100%;
+    padding: 0.5rem;
 }
 
 .title {
@@ -28,31 +28,50 @@ body {
     padding-bottom: 1rem;
     border-bottom: 1px solid #eee;
     height: auto;
-
 }
 
 .main-tabs {
     display: flex;
-    gap: 4px;
-    padding: 4px;
+    gap: 8px; /* Increase the gap between tabs */
+    padding: 8px;
     background: #f5f5f5;
-    border-radius: 4px;
+    border-radius: 8px;
     margin-bottom: 16px;
 }
 
 .main-tab-btn {
-    flex: 1;
-    padding: 8px 16px;
-    border: none;
+    padding: 12px 20px;
     background: none;
-    border-radius: 4px;
+    border: 2px solid #6200ea; /* Border for a more defined button */
+    border-radius: 10px; /* Round the corners for a modern look */
     cursor: pointer;
-    transition: all 0.2s;
+    font-size: 16px;
+    color: #6200ea;
+    transition: all 0.3s ease;
+    flex-grow: 1; /* Allow button to expand based on container size */
+}
+
+.main-tab-btn:hover {
+    background: #6200ea;
+    color: white;
+    border-color: #4500a0; /* Darker border color on hover */
 }
 
 .main-tab-btn.active {
     background: #6200ea;
     color: white;
+    border-color: #4500a0; /* Active state has the same style as hover */
+}
+
+.main-tab-btn:focus {
+    outline: none;
+    box-shadow: 0 0 4px rgba(98, 0, 234, 0.5); /* Focus effect */
+}
+
+/* Additional tweaks for smooth hover transition and accessibility */
+.main-tab-btn:focus-visible {
+    outline: 3px solid #6200ea;
+    border-radius: 10px;
 }
 
 .tab-content {
@@ -84,7 +103,6 @@ body {
     background: white;
     padding: 12px;
     border-radius: 4px;
-    border: 1px solid #eee;
 }
 
 h1 {
@@ -124,83 +142,27 @@ h1 {
 }
 
 .network-view {
-    flex: 0 0 300px; /* Fixed height for network view */
+    flex: 0 0 300px;
     min-height: 200px;
-    border: 1px solid #eee;
-    border-radius: 4px;
     margin: 8px 0;
     padding: 8px;
 }
 
-#tabs-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    overflow-y: auto;
-    flex: 1; /* This will make it fill available space */
-    min-height: 0; /* This is crucial for scroll to work with flex */
-}
 
-.tab-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.tab-item:hover {
-    background: #f5f5f5;
-}
-
-.tab-item img {
-    min-width: 16px;
-    min-height: 16px;
-    object-fit: cover;
-}
-
-.tab-item span {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.tab-cluster {
-    background: #f8f9fa;
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 8px;
-}
-
-.cluster-header {
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: #6200ea;
-}
-
-.network-section {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
 
 .network-tabs {
     display: flex;
-    gap: 4px;
-    padding: 4px;
+    gap: 8px; /* Add gap between network tabs */
+    padding: 8px;
     background: #f5f5f5;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 .network-tab-btn {
-    padding: 8px 16px;
-    border: none;
+    padding: 10px 20px;
     background: none;
-    border-radius: 4px;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -213,8 +175,8 @@ h1 {
 .network-view {
     position: relative;
     height: 300px;
-    border: 1px solid #eee;
-    border-radius: 4px;
+    background: #f0f0f0;
+    border-radius: 6px;
     overflow: hidden;
 }
 
@@ -228,9 +190,17 @@ h1 {
     padding-top: 16px;
     display: flex;
     flex-direction: column;
-    flex: 1; /* Take remaining space */
-    min-height: 0; /* Allow content to scroll */
+    flex: 1;
+    min-height: 0;
 }
+
+.groups-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
 .groups-header {
     display: flex;
     justify-content: space-between;
@@ -244,12 +214,33 @@ h1 {
     color: #6200ea;
 }
 
-#toggle-groups {
+.group-header {
+    font-weight: bold;
+    margin-bottom: 8px;
     padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.group-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.browser-groups {
+    border-left: 3px solid #2979ff;
+}
+
+.browser-group {
+    border-radius: 8px;
+}
+
+#toggle-groups {
+    padding: 8px;
     border: 1px solid #6200ea;
     background: white;
     color: #6200ea;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -259,12 +250,398 @@ h1 {
     color: white;
 }
 
+#tabs-container {
+    display: flex;
+    flex-wrap: wrap;  /* Allow tabs to wrap */
+    gap: 8px;         /* Space between tabs */
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    padding: 8px;     /* Padding to ensure tabs are not cramped */
+}
+
 #tabs-container.groups-hidden {
     display: none;
 }
 
 #tabs-container.groups-visible {
     display: flex;
-    flex: 1; /* Take all available space */
-    min-height: 0; /* Enable scrolling */
+    flex-wrap: wrap;   /* Enable wrapping for visible groups */
+    flex: 1;
+    min-height: 0;
+}
+
+.search-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.icon-btn {
+    padding: 8px;
+    border: 1px solid #6200ea;
+    background: white;
+    color: #6200ea;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background: #6200ea;
+    color: white;
+}
+
+
+
+.tab-favicon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    border-radius: 50%;
+}
+
+.tab-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pinned-tab .remove-tab-btn {
+    margin-left: 8px;
+    cursor: pointer;
+    color: #d9534f;
+    font-size: 18px;
+}
+
+.pinned-tab .remove-tab-btn:hover {
+    color: #c9302c;
+}
+
+.browser-groups-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 8px;
+}
+
+.browser-group {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.group-header {
+    padding: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.domain-tabs-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+}
+
+/* tab-cluster container */
+/* General styles for tab clusters and tab items */
+/* General styles for tab clusters and tab items */
+.tab-cluster {
+    display: flex;
+    flex-direction: column;   /* Ensure header and tabs stack vertically */
+    gap: 2px;                /* Space between cluster header and tabs */
+
+}
+
+.tab-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.5rem;      /* Padding for the button-like style */
+    border-radius: 8px;
+    background: #f5f5f5;     /* Soft background color */
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease; /* Smooth transition */
+    width: 80%;
+    flex-grow: 1;            /* Allow tab items to grow */
+    border: none;            /* Remove default button borders */
+    outline: none;           /* Remove outline */
+    box-sizing: border-box;
+}
+
+.tab-item:hover {
+    background: #e0e0e0;     /* Light hover effect */
+}
+
+.tab-item.active {
+    background: #6200ea;     /* Active tab background */
+    color: white;            /* Active tab text color */
+}
+
+.tab-item img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.tab-item span {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Truncate long text with ellipsis */
+}
+
+.tab-item:focus-visible {
+    outline: 3px solid #6200ea; /* Focus outline for accessibility */
+    border-radius: 8px;
+}
+
+/* Hidden class for collapsed sections */
+.hidden {
+    display: none;
+}
+
+/* Cluster Header Styles */
+.cluster-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;              /* Make header full-width */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.toggle-cluster {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.toggle-cluster:hover {
+    background: #bbb;
+}
+
+.cluster-header.expanded {
+    background-color: #6200ea; /* Change color when expanded */
+    color: white;
+}
+
+/* For showing all tabs when expanded */
+.cluster-tabs {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cluster-tabs.hidden {
+    display: none;
+}
+.toggle-cluster {
+    cursor: pointer;
+    background: #ccc;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.toggle-cluster:hover {
+    background: #bbb;
+    width: 90%;
+
+}
+.search-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Ensure the cluster header spans full width */
+.tab-cluster .cluster-header {
+    width: 100%;  /* Make sure the header spans full width */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* If needed, you can adjust the button styling as well */
+.tab-cluster .cluster-header .toggle-cluster {
+    width: 100%;
+    text-align: left; /* You can adjust text alignment based on preference */
+    padding: 10px;
+    background-color: #f0f0f0;  /* Adjust background if needed */
+    border: 1px solid #ccc;     /* Optional border for better visibility */
+}
+
+
+
+/* Update tab item styling */
+.tab-item {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 8px;
+}
+
+.tab-item:hover {
+    background: #e0e0e0;
+    transform: translateX(4px);
+}
+
+.tab-item.active {
+    background: #6200ea;
+    color: white;
+    border-color: #4500a0;
+}
+
+/* Update cluster styles */
+.tab-cluster {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cluster-tabs {
+    padding: 4px;
+    width: 100%;
+}
+
+/* Ensure toggle cluster button takes full width */
+.toggle-cluster {
+    width: 100%;
+    text-align: left;
+    padding: 12px;
+    background: #f8f9fa;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-cluster:hover {
+    background: #e9ecef;
+}
+
+.pinned-cluster {
+    border-radius: 8px;
+    margin-bottom: 16px;
+    border-left: 3px solid #f50057;
+    background: #fff;
+}
+
+.pinned-cluster .cluster-header {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.pinned-cluster .toggle-cluster {
+    color: #f50057;
+    font-weight: 600;
+}
+
+.pinned-tabs-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+}
+
+.pinned-tab {
+    flex: 0 1 calc(33.333% - 8px); /* Three columns with gap */
+    min-width: 150px; /* Minimum width to maintain readability */
+    height: 36px; /* Fixed height for rectangle shape */
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    background: #fff;
+    border: 1px solid #f50057;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.pinned-tab:hover {
+    background: #fff5f7;
+    transform: translateX(4px);
+}
+
+.pinned-tab img {
+    width: 16px;
+    height: 16px;
+    min-width: 16px; /* Prevent image from shrinking */
+    margin-right: 8px;
+    border-radius: 4px;
+}
+
+.pinned-tab span {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+/* Ensure proper layout during search */
+.searching .pinned-tab {
+    display: flex !important;
+}
+
+/* Search adjustments */
+.searching .pinned-tabs-grid {
+    display: flex !important;
+}
+
+.searching .pinned-tab {
+    display: flex !important;
+}
+
+/* Regular tab items (for comparison) */
+.tab-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: calc(50% - 4px);
+}
+
+.cluster-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+}
+
+.cluster-tabs.hidden {
+    display: none;
 }

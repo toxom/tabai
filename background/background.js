@@ -1,225 +1,157 @@
-// background/background.js
-
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import { GEMINI_API_KEY } from './config.js';
-
-// Initialize Gemini
-const API_KEY = 'YOUR_API_KEY'; // Store this securely
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-// Initialize state
-let quantumClusters = {};
-let activeCluster = null;
-
 chrome.sidePanel
-.setPanelBehavior({ openPanelOnActionClick: true })
-.catch((error) => console.error(error));
-
-
-console.log('TabAI Background Script Loaded');
-
-// Handle messages
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log('Background received message:', request);
-    
-    switch (request.action) {
-        case 'getTabs':
-            chrome.tabs.query({}, tabs => {
-                sendResponse(tabs);
-            });
-            return true; // Keep channel open for async response
-
-        case 'activateTab':
-            chrome.tabs.update(request.tabId, { active: true }, () => {
-                sendResponse({ success: true });
-            });
-            return true;
-
-        case 'summarize':
-            // Basic summarization for now
-            sendResponse({
-                summary: `Summary of ${request.url}`,
-                status: 'basic'
-            });
-            return true;
-    }
-});
-
-// Handle installation
-chrome.runtime.onInstalled.addListener(() => {
-    console.log('TabAI Extension Installed');
-});
+  .setPanelBehavior({ openPanelOnActionClick: true })
+  .catch((error) => console.error('SidePanel Error:', error));
 
 class TabAnalyzer {
-    constructor() {
-        this.context = '';
-        this.model = model;
+  constructor() {
+    this.context = '';
+  }
+
+  async setContext(context) {
+    try {
+      this.context = context;
+      return await this.updateAnalysis();
+    } catch (error) {
+      console.error('Failed to set context:', error);
+      return null;
     }
+  }
 
-    async analyzeTabs(tabs) {
-        try {
-            const tabData = tabs.map(tab => {
-                try {
-                    return {
-                        id: tab.id,
-                        url: tab.url,
-                        title: tab.title,
-                        domain: tab.url ? new URL(tab.url).hostname : 'unknown'
-                    };
-                } catch (e) {
-                    return {
-                        id: tab.id,
-                        url: tab.url || '',
-                        title: tab.title || '',
-                        domain: 'invalid-url'
-                    };
-                }
-            });
-
-            const prompt = `Analyze these browser tabs in the context of "${this.context}":
-                ${JSON.stringify(tabData, null, 2)}
-                
-                Please provide:
-                1. Suggested groupings/clusters
-                2. Key themes or topics
-                3. Relevance to the given context
-                4. Suggested actions or organization
-                
-                Format the response as JSON with these keys: clusters, themes, relevance, suggestions`;
-
-            const result = await this.model.generateContent(prompt);
-            return {
-                context: this.context,
-                tabs: tabData,
-                analysis: JSON.parse(result.response.text())
-            };
-        } catch (error) {
-            console.error('Analysis failed:', error);
-            return {
-                error: error.message,
-                context: this.context
-            };
-        }
+  async updateAnalysis() {
+    try {
+      const tabs = await chrome.tabs.query({ currentWindow: true });
+      return this.analyzeTabs(tabs);
+    } catch (error) {
+      console.error('Failed to update analysis:', error);
+      return null;
     }
+  }
+
+  async analyzeTabs(tabs) {
+    try {
+      const summaries = tabs.map((tab) => ({
+        id: tab.id,
+        url: tab.url,
+        title: tab.title,
+      }));
+
+      return {
+        context: this.context,
+        tabs: summaries,
+      };
+    } catch (error) {
+      console.error('Tab analysis failed:', error);
+      return null;
+    }
+  }
 }
-
-// Create analyzer instance
-const analyzer = new TabAnalyzer();
-
-// Message handler
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'analyzeContext') {
-        analyzer.setContext(request.context)
-            .then(response => sendResponse(response))
-            .catch(error => sendResponse({ error: error.message }));
-        return true; // Keep channel open for async response
-    }
-    return false;
-});
-
-// Export for debugging
-self.TabAnalyzer = TabAnalyzer;
-
 
 class QuantumCluster {
-    constructor(seed) {
-        this.seedTab = seed;
-        this.relatedTabs = new Set();
-        this.metadata = {
-            topic: null,
-            keyInsights: [],
-            progress: 0
-        };
-        this.state = 'active';
-        this.model = model;
+  constructor(seedTab) {
+    this.seedTab = seedTab;
+    this.relatedTabs = new Set();
+    this.metadata = {
+      topic: null,
+      keyInsights: [],
+      progress: 0,
+    };
+    this.state = 'active';
+  }
+
+  async analyze() {
+    try {
+      const url = new URL(this.seedTab.url);
+      this.metadata.topic = url.hostname;
+      this.metadata.keyInsights = [this.seedTab.title];
+      return this.metadata;
+    } catch (error) {
+      console.error('Cluster analysis failed:', error);
+      return null;
     }
+  }
 
-    async analyze() {
-        try {
-            // Use Gemini to analyze the cluster
-            const prompt = `Analyze this webpage:
-                Title: ${this.seedTab.title}
-                URL: ${this.seedTab.url}
-                
-                Please provide:
-                1. Main topic/theme
-                2. Key insights
-                3. Related topics to look for
-                
-                Format the response as JSON with these keys: topic, insights, relatedTopics`;
-
-            const result = await this.model.generateContent(prompt);
-            const analysis = JSON.parse(result.response.text());
-
-            this.metadata = {
-                topic: analysis.topic,
-                keyInsights: analysis.insights,
-                relatedTopics: analysis.relatedTopics,
-                progress: 100
-            };
-
-            return this.metadata;
-        } catch (error) {
-            console.error('Analysis failed:', error);
-            return null;
-        }
-    }
+  cleanup() {
+    // Add logic here to remove old or irrelevant relatedTabs entries if needed
+  }
 }
 
+// State management
+const state = {
+  analyzer: new TabAnalyzer(),
+  quantumClusters: {},
+  activeCluster: null,
+};
 
-// Single onInstalled listener
+// Initialize extension
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({
-      quantumClusters: {},
-      activeCluster: null
+    quantumClusters: {},
+    activeCluster: null,
   });
 });
 
-// Handle tab creation and clustering
+// Tab creation and clustering
 chrome.tabs.onCreated.addListener(async (tab) => {
-  const cluster = new QuantumCluster(tab);
-  await cluster.analyze();
-  
-  // Store cluster data
-  const clusters = await chrome.storage.local.get('quantumClusters');
-  clusters.quantumClusters[tab.id] = cluster;
-  await chrome.storage.local.set({ quantumClusters: clusters });
+  try {
+    const cluster = new QuantumCluster(tab);
+    await cluster.analyze();
+
+    // Safely update quantumClusters in chrome.storage.local
+    const { quantumClusters } = await chrome.storage.local.get('quantumClusters');
+    const updatedClusters = { ...quantumClusters, [tab.id]: cluster };
+    await chrome.storage.local.set({ quantumClusters: updatedClusters });
+  } catch (error) {
+    console.error('Failed to create and analyze cluster:', error);
+  }
 });
 
-// Single message listener for all actions
+// Message listener
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  switch (request.action) {
-      case 'getTabs':
-          chrome.tabs.query({}, sendResponse);
-          return true;
+  (async () => {
+    try {
+      switch (request.action) {
+        case 'getTabs':
+          const tabs = await chrome.tabs.query({ currentWindow: true });
+          sendResponse(tabs);
+          break;
 
-      case 'activateTab':
-          chrome.tabs.update(request.tabId, { active: true });
-          return true;
+        case 'activateTab':
+          await chrome.tabs.update(request.tabId, { active: true });
+          sendResponse({ success: true });
+          break;
 
-      case 'analyzeContext':
-          analyzer.setContext(request.context)
-              .then(sendResponse);
-          return true;
+        case 'analyzeContext':
+          const analysis = await state.analyzer.setContext(request.context);
+          sendResponse(analysis);
+          break;
 
-      case 'openSidePanel':
-          if (chrome.sidePanel) {
-              chrome.sidePanel.open();
+        case 'openSidePanel':
+          if (chrome.sidePanel?.open) {
+            await chrome.sidePanel.open();
+            sendResponse({ success: true });
+          } else {
+            sendResponse({ error: 'Side panel API not supported.' });
           }
-          return true;
+          break;
 
-      case 'summarize':
-          // Basic summarization until we can access Chrome's AI APIs
+        case 'summarize':
           sendResponse({
-              summary: `Summary of ${request.url}`,
-              status: 'basic'
+            summary: `Summary of ${request.url}`,
+            status: 'basic',
           });
-          return true;
-  }
+          break;
+
+        default:
+          sendResponse({ error: 'Unknown action.' });
+      }
+    } catch (error) {
+      console.error(`Error handling action "${request.action}":`, error);
+      sendResponse({ error: error.message });
+    }
+  })();
+  return true; // Indicates asynchronous response
 });
 
 // Export for debugging
 self.TabAnalyzer = TabAnalyzer;
 self.QuantumCluster = QuantumCluster;
-
